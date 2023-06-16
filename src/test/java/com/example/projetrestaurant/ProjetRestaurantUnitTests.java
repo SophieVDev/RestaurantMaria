@@ -51,7 +51,25 @@ class ProjetRestaurantUnitTests {
         DemandeReservation demande = new DemandeReservation(4, LocalDateTime.of(2023, 6, 21, 13, 5),
                 "Michel",
                 "henric");
-        assertEquals("OK: réservation enregistrée", restaurant.validerDemandeReservation(demande));
+        assertEquals("Vous pouvez réserver uniquement de 12h à 13h", restaurant.validerDemandeReservation(demande));
+    }
+
+    @Test
+    void testOrdreTables(){
+        System.out.println(restaurant.getTables());
+    }
+    @Test
+    void testReservation(){
+        DemandeReservation demande = new DemandeReservation(
+                6, LocalDateTime.of(2023,6,21,13,0),
+                "Michel",
+                "Dupont");
+        String reponse = restaurant.validerDemandeReservation(demande);
+        assertEquals("OK: réservation enregistrée", reponse);
+
+        String reponse2 = restaurant.validerDemandeReservation(demande);
+        assertNotEquals("OK: réservation enregistrée", reponse2);
+
     }
 
 }

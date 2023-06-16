@@ -1,6 +1,7 @@
 package com.example.projetrestaurant.business;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Restaurant {
@@ -12,7 +13,7 @@ public class Restaurant {
     private String email;
 
     private List<Table> tables = new ArrayList<>();
-    private List<Reservation> reservation = new ArrayList<>();
+    private List<Reservation> reservations = new ArrayList<>();
 
     public Restaurant() {
     }
@@ -65,11 +66,11 @@ public class Restaurant {
     }
 
     public List<Reservation> getReservation() {
-        return reservation;
+        return reservations;
     }
 
     public void setReservation(List<Reservation> reservation) {
-        this.reservation = reservation;
+        this.reservations = reservation;
     }
 
     @Override
@@ -80,7 +81,7 @@ public class Restaurant {
                 ", telephone='" + telephone + '\'' +
                 ", email='" + email + '\'' +
                 ", tables=" + tables +
-                ", reservation=" + reservation +
+                ", reservation=" + reservations +
                 '}';
     }
 
@@ -90,31 +91,64 @@ public class Restaurant {
                 "01 45 25 24 25",
                 "marie@restaurant.fr");
 
-        restaurantMaria.ajouterTable(1,6);
-        restaurantMaria.ajouterTable(2,2);
-        restaurantMaria.ajouterTable(3,2);
-        restaurantMaria.ajouterTable(4,4);
-return restaurantMaria;
+        restaurantMaria.ajouterTable(1, 6);
+        restaurantMaria.ajouterTable(2, 2);
+        restaurantMaria.ajouterTable(3, 2);
+        restaurantMaria.ajouterTable(4, 4);
+        return restaurantMaria;
     }
 
     private void ajouterTable(int numeroTable, int nombreCouverts) {
-        tables.add(new Table(numeroTable,nombreCouverts));
+        tables.add(new Table(numeroTable, nombreCouverts));
+
+        //faire un tri croissant et ne pas réserver une table de 6 avec seulement 2 personne car c'est la première dans la liste
+        tables.sort(Comparator.comparing(Table::getNombreCouverts));
     }
 
-    public String validerDemandeReservation(DemandeReservation demande){
+    private void ajouterReservation(Reservation reservation) {
+   reservations.add(reservation);
+    }
 
-        if (demande.getHoraire().getHour()<12){
+    public String validerDemandeReservation(DemandeReservation demande) {
+
+        if (demande.getHoraire().getHour() < 12) {
             return "Le restaurant est ouvert à partir de 12h00";
         }
-        if(demande.getHoraire().getHour()>13){
+        if (demande.getHoraire().getHour() > 13) {
             return "Vous pouvez réserver uniquement de 12h à 13h";
         }
-        if(demande.getNombreCouverts()>6){
+        if (demande.getHoraire().getHour() == 13 && demande.getHoraire().getMinute() > 0) {
+            return "Vous pouvez réserver uniquement de 12h à 13h";
+        }
+        if (demande.getNombreCouverts() > 6) {
             return "Nous n'avons pas de table de plus de 6 personnes";
         }
 
-        return "OK: réservation enregistrée";
-    }
+        for (Table table : tables) {
+            if (table.getNombreCouverts() >= demande.getNombreCouverts()) {
 
+                boolean tableDejaReservee = false;
+                for (Reservation reservation : reservations) {
+                    if (reservation.getHoraire().equals(demande.getHoraire())
+                            && (reservation.getTable().getNumeroTable() == table.getNumeroTable()))
+                        tableDejaReservee = true;
+                }
+                if (tableDejaReservee) {
+                    continue;
+                } else {
+                    //OK : on peut réserver cette table
+                    //int nombreCouverts, LocalDateTime horaire, String prenom, String nom
+                    Reservation reservation = new Reservation(demande.getNombreCouverts(),
+                            demande.getHoraire(),
+                            demande.getPrenom(),
+                            demande.getNom());
+                    reservation.setTable(table);
+                    ajouterReservation(reservation);
+                    return "OK: réservation enregistrée";
+                }
+            }
+        }
+        return "Désolé, il n'y a plus de table disponible";
+    }
 
 }
