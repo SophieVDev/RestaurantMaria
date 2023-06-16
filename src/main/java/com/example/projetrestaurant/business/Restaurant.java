@@ -101,4 +101,20 @@ return restaurantMaria;
         tables.add(new Table(numeroTable,nombreCouverts));
     }
 
+    public String validerDemandeReservation(DemandeReservation demande){
+
+        if (demande.getHoraire().getHour()<12){
+            return "Le restaurant est ouvert à partir de 12h00";
+        }
+        if(demande.getHoraire().getHour()>13){
+            return "Vous pouvez réserver uniquement de 12h à 13h";
+        }
+        if(demande.getNombreCouverts()>6){
+            return "Nous n'avons pas de table de plus de 6 personnes";
+        }
+
+        return "OK: réservation enregistrée";
+    }
+
+
 }
