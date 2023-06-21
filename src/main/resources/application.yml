@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://mysql-sophie88.alwaysdata.net/sophie88_restaurant
+    username: sophie88_resto
+    password: resto_88sophie
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

@@ -1,20 +1,31 @@
-package com.example.projetrestaurant.business;
+package com.example.projetrestaurant.jpa;
+
+import com.example.projetrestaurant.business.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-
-public class Reservation {
+@Entity
+@jakarta.persistence.Table(name="reservations")
+// IL y a deja une classe qui s'appelle table c'ets pourca quon laisse le jakarta.performance
+public class ReservationEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private int nombreCouverts;
     private LocalDateTime horaire;
     private String prenom;
     private String nom;
 
+    @ManyToOne
+    private TableEntity table;
 
-    private Table table;
+    @ManyToOne
+    private RestaurantEntity restaurantEntity;
 
-    public Reservation() {
+    public ReservationEntity() {
     }
 
-    public Reservation(int nombreCouverts, LocalDateTime horaire, String prenom, String nom) {
+    public ReservationEntity(int nombreCouverts, LocalDateTime horaire, String prenom, String nom) {
         this.nombreCouverts = nombreCouverts;
         this.horaire = horaire;
         this.prenom = prenom;
@@ -53,22 +64,38 @@ public class Reservation {
         this.nom = nom;
     }
 
-    public Table getTable() {
+    public TableEntity getTable() {
         return table;
     }
 
-    public void setTable(Table table) {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public RestaurantEntity getRestaurantEntity() {
+        return restaurantEntity;
+    }
+
+    public void setRestaurantEntity(RestaurantEntity restaurantEntity) {
+        this.restaurantEntity = restaurantEntity;
+    }
+
+    public void setTable(TableEntity table) {
         this.table = table;
     }
 
     @Override
     public String toString() {
-        return "Reservation{" +
+        return "ReservationEntity{" +
                 "nombreCouverts=" + nombreCouverts +
                 ", horaire=" + horaire +
                 ", prenom='" + prenom + '\'' +
                 ", nom='" + nom + '\'' +
-                ", table=" + table +
+               // ", table=" + table +
                 '}';
     }
 }
