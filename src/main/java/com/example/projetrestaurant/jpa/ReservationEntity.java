@@ -76,14 +76,16 @@ public class ReservationEntity {
         this.id = id;
     }
 
+    /*
     public RestaurantEntity getRestaurantEntity() {
+
         return restaurantEntity;
     }
 
-    public void setRestaurantEntity(RestaurantEntity restaurantEntity) {
-        this.restaurantEntity = restaurantEntity;
+    public void setRestaurantEntity(RestaurantEntity restaurant) {
+        this.restaurant = restaurant;
     }
-
+*/
     public void setTable(TableEntity table) {
         this.table = table;
     }

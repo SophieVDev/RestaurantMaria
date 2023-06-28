@@ -18,5 +18,16 @@ public class ReservationMapper {
 return entity;
 
     }
+
+    public static Reservation fromENtityToBusiness(ReservationEntity entity){
+        Reservation resa = new Reservation();
+        resa.setNom(entity.getNom());
+        resa.setPrenom(entity.getPrenom());
+        resa.setNombreCouverts(entity.getNombreCouverts());
+        resa.setHoraire(entity.getHoraire());
+        //resa.setTable(entity.getTable());
+
+        return resa;
+    }
 }
 

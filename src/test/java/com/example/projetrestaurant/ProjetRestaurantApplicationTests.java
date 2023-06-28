@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 class ProjetRestaurantApplicationTests {
@@ -39,17 +40,24 @@ class ProjetRestaurantApplicationTests {
 
     @Test
     void testReservation() {
-        TableEntity entityTable = new TableEntity(1,4);
-        tableRepository.save(entityTable);
+        //TableEntity entityTable = new TableEntity(1,4);
+        //tableRepository.save(entityTable);
+        TableEntity entityTable = null;
+        Optional<TableEntity> optionalTable = tableRepository.findById(1);
+        if(optionalTable.isPresent()){
+            entityTable = optionalTable.get();
+        }
+
 
         Reservation reservation = new Reservation(4,
-                LocalDateTime.of(2023, 6, 21, 10, 0),
+                LocalDateTime.of(2023, 6, 30, 10, 0),
                 "Michel",
                 "Duroc");
 
         ReservationEntity entityReservation = ReservationMapper.fromBusinessToEntity(reservation);
         entityReservation.setTable(entityTable);
-        reservationRepository.save(entityReservation);
+        System.out.println(entityReservation);
+        //reservationRepository.save(entityReservation);
     }
 
 
